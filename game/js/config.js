@@ -71,27 +71,21 @@ export const gameConfig = {
   // weight — для взвешенного рандома (0 = не спавнится)
   // ----------------------------------------------------------
 FOOD_TYPES: [
-    // основные — высокий вес (часто, легко матчатся)
-    { id: 'coffee-beans',    src: 'game/assets/food/coffee-beans.png',    weight: 6, padding: 0.06, scale: 1 },
-    { id: 'milk-carton',     src: 'game/assets/food/milk-carton.png',     weight: 6, padding: 0.05, scale: 1.2 },
-    { id: 'espresso',        src: 'game/assets/food/espresso.png',        weight: 6, padding: 0.05, scale: 1.2 },
-    { id: 'coffee',          src: 'game/assets/food/coffee.png',          weight: 5, padding: 0.05, scale: 1.1 },
-    { id: 'cup',             src: 'game/assets/food/cup.png',             weight: 5, padding: 0.05, scale: 1.2 },
-    // средние
-    { id: 'latte-macchiato', src: 'game/assets/food/latte-macchiato.png', weight: 4, padding: 0.05, scale: 1.3 },
-    { id: 'cappuccino',      src: 'game/assets/food/cappuccino.png',      weight: 4, padding: 0.05, scale: 1.1 },
-    { id: 'croissant',       src: 'game/assets/food/croissant.png',       weight: 3, padding: 0.05, scale: 1 },
-    { id: 'bread',           src: 'game/assets/food/bread.png',           weight: 3, padding: 0.05, scale: 1 },
-    { id: 'coffee-cup',      src: 'game/assets/food/coffee-cup.png',      weight: 3, padding: 0.05, scale: 1.1 },
-    // редкие (десерты / холодные напитки)
-    { id: 'donut',           src: 'game/assets/food/donut.png',           weight: 2, padding: 0.05, scale: 1.1 },
-    { id: 'macarons',        src: 'game/assets/food/macarons.png',        weight: 2, padding: 0.05, scale: 1.1 },
-    { id: 'iced-latte',      src: 'game/assets/food/iced-latte.png',      weight: 2, padding: 0.05, scale: 1.2 },
-    { id: 'iced-coffee',     src: 'game/assets/food/iced-coffee.png',     weight: 2, padding: 0.05, scale: 1.3 },
-    { id: 'bubble-tea',      src: 'game/assets/food/bubble-tea.png',      weight: 2, padding: 0.05, scale: 1.3 },
-    { id: 'doughnutstack',   src: 'game/assets/food/doughnutstack.png',   weight: 2, padding: 0.05, scale: 1.05 },
-    // супер-редкий (бонус)
-    { id: 'coffee-machine',  src: 'game/assets/food/coffee-machine.png',  weight: 1, padding: 0.05, scale: 0.9 },
+    // основные — высокий вес (часто, легко матчатся) — сумма 20 (33%)
+    { id: 'coffee-beans',    src: 'game/assets/food/coffee-beans.png',    weight: 7, padding: 0.06, scale: 1 },
+    { id: 'espresso',        src: 'game/assets/food/espresso.png',        weight: 7, padding: 0.05, scale: 1.2 },
+    { id: 'cup',             src: 'game/assets/food/cup.png',             weight: 6, padding: 0.05, scale: 1.2 },
+    // средние — сумма 18 (30%)
+    { id: 'latte-macchiato', src: 'game/assets/food/latte-macchiato.png', weight: 5, padding: 0.05, scale: 1.3 },
+    { id: 'cappuccino',      src: 'game/assets/food/cappuccino.png',      weight: 5, padding: 0.05, scale: 1.1 },
+    { id: 'croissant',       src: 'game/assets/food/croissant.png',       weight: 4, padding: 0.05, scale: 1 },
+    { id: 'coffee-cup',      src: 'game/assets/food/coffee-cup.png',      weight: 4, padding: 0.05, scale: 1.1 },
+    // редкие (десерты / холодные напитки) — сумма 22 (37%)
+    { id: 'macarons',        src: 'game/assets/food/macarons.png',        weight: 3, padding: 0.05, scale: 1.1 },
+    { id: 'iced-latte',      src: 'game/assets/food/iced-latte.png',      weight: 3, padding: 0.05, scale: 1.2 },
+    { id: 'iced-coffee',     src: 'game/assets/food/iced-coffee.png',     weight: 3, padding: 0.05, scale: 1.3 },
+    { id: 'bubble-tea',      src: 'game/assets/food/bubble-tea.png',      weight: 3, padding: 0.05, scale: 1.3 },
+    { id: 'doughnutstack',   src: 'game/assets/food/doughnutstack.png',   weight: 3, padding: 0.05, scale: 1.05 },
   ],
 
   // Fit для <img>-режима (аналог INGREDIENT_FIT_*)
