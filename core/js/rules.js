@@ -162,6 +162,14 @@ export function createRules() {
       return anyIncomplete[Math.floor(Math.random() * anyIncomplete.length)];
     }
 
+    // 4) крайний случай: любая непустая ячейка (гарантия при MAX < TOTAL_SLOTS)
+    for (let i = 0; i < totalSlots; i++) {
+      if (slots[i].length > 0) {
+        forceStreak = 0;
+        return slots[i][0].type;
+      }
+    }
+
     forceStreak = 0;
     return pickWeightedType();
   }
@@ -318,6 +326,27 @@ export function createRules() {
     pendingSpawnAt = nowMs + cfg.SPAWN_DELAY_MS;
   }
 
+  // Гарантия «на поле есть хотя бы одна пара» — иначе следующий
+  // pickTypeAntiStuck() не найдёт singles (шаг 2) и будет форсить шаг 3.
+  // Клонируем тип из любой непустой ячейки в свободное место.
+  function ensureAtLeastOnePair() {
+    const counts = buildTypeCounts();
+    if (hasAnyPair(counts)) return false;
+    const free = listFreePlaces();
+    if (free.length === 0) return false;
+
+    const candidates = [];
+    for (let i = 0; i < totalSlots; i++) {
+      if (slots[i].length > 0) candidates.push(slots[i][0].type);
+    }
+    if (candidates.length === 0) return false;
+
+    const type = candidates[Math.floor(Math.random() * candidates.length)];
+    const spot = free[Math.floor(Math.random() * free.length)];
+    slots[spot.cell].push({ type });
+    return true;
+  }
+
   function processPendingSpawn() {
     if (!spawnLocked) return;
     if (nowMs < pendingSpawnAt) return;
@@ -325,6 +354,9 @@ export function createRules() {
     const created = spawnItems(pendingSpawnCount);
     const need = cfg.MIN_ITEMS_ON_FIELD - countItemsOnField();
     if (need > 0) created.push(...spawnItems(need));
+
+    // добиваем пару, если anti-stuck не смог (все три шага провалились)
+    ensureAtLeastOnePair();
 
     for (const c of created) {
       events.push({ type: 'spawn', cellIndex: c.cellIndex, placeIndex: c.placeIndex, foodType: c.type });
@@ -390,12 +422,28 @@ export function createRules() {
       }
     }
 
+    // убираем случайные тройки после первичного заполнения
     let safety = 0;
     while (findMatchCells().length > 0 && safety < 100) {
       const cells = findMatchCells();
       const ci = cells[Math.floor(Math.random() * cells.length)];
-      slots[ci][Math.floor(Math.random() * 3)].type = pickWeightedType();
+      slots[ci][Math.floor(Math.random() * PLACES_PER_CELL)].type = pickWeightedType();
       safety++;
+    }
+
+    // страховка: если после 100 попыток тройка всё ещё есть (редкий edge-case),
+    // принудительно меняем один элемент в каждой найденной ячейке на другой тип
+    if (findMatchCells().length > 0) {
+      for (const ci of findMatchCells()) {
+        const arr = slots[ci];
+        const present = new Set(arr.map(it => it.type));
+        let replacement = null;
+        for (const t of FOOD_IDS) {
+          if (!present.has(t)) { replacement = t; break; }
+        }
+        if (replacement) arr[0].type = replacement;
+        else arr[0].type = pickWeightedType();
+      }
     }
   }
 

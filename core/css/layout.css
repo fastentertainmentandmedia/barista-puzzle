@@ -50,7 +50,7 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  gap: 4px;
+  gap: 8px;
   flex: 0 0 85px;
   min-width: 0;
 }

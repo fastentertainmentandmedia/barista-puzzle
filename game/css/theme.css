@@ -311,16 +311,15 @@ a:hover, a:active, a:focus {
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg,
-    #f0d6a8 0%, #d6a05a 45%, #c9852e 100%);
+    #ffd24a 0%, #ff9a1a 45%, #f07000 100%);
   transform-origin: left center;
   transform: scaleX(0);
   will-change: transform;
-  /* transition НЕ ставить — обновляется каждый кадр из JS */
 }
 
 .combo-wrap.fast .combo-bar-fill {
   background: linear-gradient(90deg,
-    #d6a05a 0%, #b8602e 45%, #8c3b1e 100%);
+    #ff9a1a 0%, #f07000 45%, #c05000 100%);
 }
 
 .combo-label {
