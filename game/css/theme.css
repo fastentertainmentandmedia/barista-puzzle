@@ -1,0 +1,521 @@
+/* ============================================================
+   [FILE: game/css/theme.css]  —  Barista Puzzle (light)
+   ============================================================ */
+
+:root {
+  --header-h:    100px;
+  --gap-sm:      8px;
+  --field-aspect: 1.4;
+
+  /* --- фон страницы / поле --- */
+  --color-page-bg:       #f4ece2;   /* крем */
+  --color-field-bg-top:  #e8d5bf;   /* латте */
+  --color-field-bg-bot:  #d9c2a8;   /* капучино */
+
+  /* --- ячейка --- */
+  --color-cell-bg:       #fffaf3;   /* пенка */
+  --color-cell-glow:     rgba(180, 120, 60, 0.18);
+
+  /* --- полка --- */
+  --color-shelf-bg:      #e8d5bf;   /* светлое дерево */
+  --color-shelf-border:  #c9a97a;   /* карамель */
+
+  --color-item-shadow:   rgba(90, 60, 30, 0.25);
+
+  /* --- combo --- */
+  --color-combo-track:   #efe1cf;
+  --color-combo-track-b: #d9c2a8;
+  --color-combo-fill:    #c9852e;
+  --color-combo-fast:    #b8402e;
+  --color-combo-label:   #5a3a24;
+
+  /* --- текст / HUD --- */
+  --color-text-main:     #3a2a1e;
+  --color-text-dim:      #8c6a44;
+  --color-text-accent:   #8c3b1e;
+  --color-score-bg:      #f0d6a8;
+  --color-score-bg-dark: #d9c2a8;
+  --color-score-shadow:  #c9a97a;
+  --color-combo-bg:      #e8d0e8;
+  --color-combo-bg-dark: #d0b0d0;
+  --color-combo-shadow:  #b890b8;
+  --color-reset-bg:      #d9c2a8;
+  --color-reset-bg-dark: #b89a78;
+
+  --color-spawn-badge:   #8c3b1e;
+  --color-accent:        #c9852e;
+
+  /* --- таймер --- */
+  --color-timer-normal:  #6b9a4a;
+  --color-timer-warning: #c9852e;
+  --color-timer-danger:  #c0503c;
+
+  /* --- панели --- */
+  --color-panel-bg:      #fffaf3;
+  --color-panel-border:  #c9a97a;
+  --color-hint-bg:       rgba(255, 250, 243, 0.96);
+  --color-intro-bg:      #f4ece2;
+  --color-warning:       #c9852e;
+
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
+  --radius-pill: 40px;
+
+  --font-ui:   'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  --hud-top-h:   0.10;
+  --hud-padding: 0.03;
+}
+
+body {
+  background-color: var(--color-page-bg);
+  font-family: var(--font-ui);
+  color: var(--color-text-main);
+}
+
+:focus-visible { outline-color: var(--color-panel-border); }
+
+a, a:link, a:visited,
+a:hover, a:active, a:focus {
+  color: var(--color-text-accent);
+}
+
+/* ============================================================
+   [BLOCK: header / logo]
+   ============================================================ */
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.header-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ============================================================
+   [BLOCK: board / shelf / cell]
+   ============================================================ */
+
+.board {
+  background: transparent;
+}
+
+.shelf {
+  background: var(--color-shelf-bg);
+  border: 2px solid var(--color-shelf-border);
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 4px 0 #c9a97a,
+    inset 0 0 0 2px #fffaf3;
+}
+
+.cell {
+  background: var(--color-cell-bg);
+  box-shadow:
+    inset 0 0 0 2px #e8d5bf;
+}
+
+.cell.drag-over {
+  box-shadow:
+    inset 0 0 0 3px #c9852e;
+}
+
+/* «кофейная поверхность» в ячейке: светлая крема */
+.cell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(ellipse at 50% 50%,
+    #f0d6b0 0%,
+    #e8c9a0 50%,
+    #d9b48a 100%);
+}
+
+.cell.drag-over::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: rgba(200, 140, 60, 0.15);
+  box-shadow: inset 0 0 0 3px #c9852e;
+  pointer-events: none;
+}
+
+/* ============================================================
+   [BLOCK: item / анимации мержа]
+   ============================================================ */
+
+.item:active { cursor: grabbing; }
+
+.merge-flash {
+  background: radial-gradient(circle,
+    #fffaf0 0%, #f0d6a8 30%, #c9852e 55%, rgba(180, 100, 20, 0) 75%);
+}
+
+.merge-ring {
+  border-color: #c9852e;
+  box-shadow: 0 0 12px #c9852e;
+}
+
+.spark {
+  background: radial-gradient(circle,
+    #fffaf0 0%, #f0c98a 60%, rgba(200, 140, 60, 0) 100%);
+}
+
+.spawn-badge {
+  color: var(--color-spawn-badge);
+  text-shadow: 0 0 8px #f0d6a8, 0 0 16px #c9852e;
+}
+
+/* ============================================================
+   [BLOCK: hud]
+   ============================================================ */
+
+.hud-layer {
+  font-family: var(--font-ui);
+  color: var(--color-text-main);
+}
+
+.hud-reset {
+  background: var(--color-reset-bg);
+  border: 2px solid var(--color-reset-bg-dark);
+  box-shadow: 0 4px 0 var(--color-reset-bg-dark);
+  color: #3a2a1e;
+}
+
+.hud-reset:active {
+  box-shadow:    0 1px 0 var(--color-reset-bg-dark);
+}
+
+.hud-stat.score {
+  background: var(--color-score-bg);
+  border: 2px solid var(--color-score-bg-dark);
+  box-shadow:    0 4px 0 var(--color-score-shadow);
+  color: #3a2a1e;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.hud-stat.max-combo {
+  background: var(--color-combo-bg);
+  border: 2px solid var(--color-combo-bg-dark);
+  box-shadow:    0 4px 0 var(--color-combo-shadow);
+  color: #4a2a4a;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.hud-stat .stat-label {
+  color: var(--color-text-dim);
+}
+
+.hud-stat .stat-value {
+  color: var(--color-text-accent);
+}
+
+.hud-stat.timer {
+  background: #d9e8c9;
+  border: 2px solid #b8d0a0;
+  box-shadow:    0 4px 0 #a0b888;
+  color: #3a4a2a;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: transform .2s, opacity .2s;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hud-stat.timer .hud-timer {
+  font-family: var(--font-mono);
+  font-weight: 900;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.hud-stat.timer.is-warning {
+  background: #f0d6a8;
+  border-color: #d9b48a;
+  box-shadow:    0 4px 0 #c9a97a;
+  transform: scale(1.05);
+}
+
+.hud-stat.timer.is-danger {
+  background: #f0c0b0;
+  border-color: #d9a090;
+  box-shadow:    0 4px 0 #c98878;
+  transform: scale(1.1);
+}
+
+.hud-stat.timer.is-critical {
+  background: #e8a898;
+  border-color: #d08878;
+  box-shadow:    0 4px 0 #b86858;
+  transform: scale(1.1);
+  animation: hud-timer-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes hud-timer-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
+
+/* ============================================================
+   [BLOCK: combo-bar]
+   ============================================================ */
+
+.combo-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 100%;
+  height: 35px;
+  box-sizing: border-box;
+
+  background: var(--color-combo-track);
+  border: 2px solid var(--color-combo-track-b);
+  border-radius: var(--radius-md);
+
+  box-shadow: 0 4px 0 var(--color-combo-track-b);
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.combo-bar-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.combo-bar-fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg,
+    #f0d6a8 0%, #d6a05a 45%, #c9852e 100%);
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+  /* transition НЕ ставить — обновляется каждый кадр из JS */
+}
+
+.combo-wrap.fast .combo-bar-fill {
+  background: linear-gradient(90deg,
+    #d6a05a 0%, #b8602e 45%, #8c3b1e 100%);
+}
+
+.combo-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  color: var(--color-combo-label);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  font-weight: 900;
+  font-size: 0.55em;
+  letter-spacing: 1px;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+.combo-pop {
+  color: #8c3b1e;
+  text-shadow:
+    0 0 6px #f0d6a8,
+    0 0 12px #c9852e,
+    0 1px 0 #fffaf3;
+}
+
+.combo-glow {
+  background: radial-gradient(ellipse at center,
+    rgba(200, 140, 60, 0.35), transparent 70%);
+}
+
+/* ============================================================
+   [BLOCK: touch-hint]
+   ============================================================ */
+
+.touch-hint {
+  background-color: var(--color-hint-bg);
+  color: var(--color-text-main);
+  border: 2px solid var(--color-panel-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-ui);
+  font-size: clamp(18px, 5vw, 28px);
+  font-weight: 900;
+  line-height: 1.6;
+  letter-spacing: 2px;
+  text-align: center;
+  box-shadow:
+    0 8px 24px rgba(90, 60, 30, 0.15);
+}
+
+.touch-hint small {
+  font-size: .75em;
+  letter-spacing: 3px;
+  color: var(--color-text-dim);
+  text-shadow: none;
+}
+
+body[data-hint="limit"] .touch-hint {
+  background: linear-gradient(180deg, #fffaf3 0%, #f4ece2 100%);
+  border: 2px solid var(--color-warning);
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 5vw, 32px) clamp(24px, 6vw, 48px);
+  box-shadow: 0 10px 30px rgba(90, 60, 30, 0.2);
+  text-align: center;
+  pointer-events: auto;
+}
+
+body[data-hint="limit"] .hint-limit-title {
+  font-size: clamp(22px, 5.5vw, 32px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text-accent);
+  text-shadow: 0 0 10px rgba(200, 140, 60, 0.3);
+  margin-bottom: 12px;
+}
+
+body[data-hint="limit"] .hint-limit-record,
+body[data-hint="limit"] .hint-limit-streak {
+  font-size: clamp(16px, 3.6vw, 18px);
+  color: var(--color-text-main);
+  letter-spacing: 0.5px;
+  padding: 6px 0;
+}
+
+body[data-hint="limit"] .hint-limit-streak {
+  border-top: 1px solid rgba(200, 140, 60, 0.25);
+  border-bottom: 1px solid rgba(200, 140, 60, 0.25);
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+
+body[data-hint="limit"] #limitBestScore,
+body[data-hint="limit"] #limitBestStreak {
+  font-size: 1.4em;
+  font-weight: 900;
+  color: var(--color-warning);
+  margin-left: 6px;
+  text-shadow: 0 0 8px rgba(200, 140, 60, 0.3);
+}
+
+body[data-hint="limit"] .hint-limit-body {
+  font-size: clamp(15px, 3.2vw, 17px);
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  color: var(--color-text-main);
+}
+
+/* ============================================================
+   [BLOCK: intro]
+   ============================================================ */
+
+.intro-content {
+  background-color: #f4ece2;
+  border: 3px solid var(--color-panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 40px rgba(90, 60, 30, 0.15);
+  color: var(--color-text-main);
+}
+
+.intro-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.intro-logo {
+  max-width: 70%;
+  max-height: 120px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.intro-title {
+  font-size: clamp(20px, 5vw, 28px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--color-text-accent);
+}
+
+.intro-rules {
+  font-size: clamp(13px, 3.4vw, 15px);
+  color: var(--color-text-main);
+}
+
+.intro-rules li::before {
+  color: var(--color-text-dim);
+  font-size: .9em;
+}
+
+.intro-cookie {
+  font-size: clamp(12px, 2.8vw, 14px);
+  color: var(--color-text-dim);
+}
+
+.intro-accept {
+  font-family: var(--font-ui);
+  font-size: clamp(14px, 3.6vw, 17px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #fffaf3;
+  text-transform: uppercase;
+  border: 2px solid #c9852e;
+  border-radius: var(--radius-pill);
+  background-color: #c9852e;
+  box-shadow:
+    0 4px 0 #8c5a1e,
+    0 6px 12px rgba(140, 90, 30, 0.25);
+}
+
+.intro-accept:active {
+  background-color: #b87020;
+  box-shadow:
+    0 2px 0 #8c5a1e,
+    0 4px 8px rgba(140, 90, 30, 0.25);
+}
+
+/* ============================================================
+   [BLOCK: preloader]
+   ============================================================ */
+
+#preloader {
+  background: #f4ece2;
+  color: #3a2a1e;
+  font-family: var(--font-ui);
+}
+
+.preloader-text {
+  opacity: .7;
+}
+
+@keyframes preloader-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
